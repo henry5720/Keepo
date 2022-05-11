@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+.pomodoro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 50px;
+  // background-color: aqua;
+  .timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  button {
+    margin: 10px;
+    width: 100px;
+  }
+}
+
+canvas {
+  display: block;
+  scroll-behavior: none;
+  background-color: chocolate;
+}
