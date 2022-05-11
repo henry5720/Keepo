@@ -4,10 +4,10 @@ import Nav from "./pages/Nav/Nav";
 
 function App() {
   return (
-    <>
-      <Timer />
+    <div className="app">
       <Nav />
-    </>
+      <Timer />
+    </div>
   );
 }
 

@@ -4,9 +4,9 @@ function Nav() {
   return (
     <>
       <ul>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>Timer</li>
+        <li>Stats</li>
+        <li>Setting</li>
       </ul>
     </>
   );

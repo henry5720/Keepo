@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer, useRef } from "react";
 
 const initialState = {
-  minutes: 1,
+  minutes: 25,
   seconds: 0,
   count: 0,
   isOn: false,
@@ -13,7 +13,7 @@ function reducer(state, action) {
         return {
           ...state,
           count: state.count + 1,
-          minutes: 1,
+          minutes: 25,
           seconds: 0,
           isOn: !state.isOn,
         };
@@ -21,7 +21,7 @@ function reducer(state, action) {
       if (state.seconds === 0 && state.minutes !== 0) {
         return {
           ...state,
-          seconds: 2,
+          seconds: 59,
           minutes: state.minutes - 1,
         };
       }
@@ -47,7 +47,8 @@ function reducer(state, action) {
       };
     case "timerReset":
       return {
-        minutes: 1,
+        ...state,
+        minutes: 25,
         seconds: 0,
         count: 0,
         isOn: false,
@@ -102,9 +103,9 @@ function Timer() {
       </div>
       <div>{state.count}/4</div>
       <div>
-        <button onClick={timerNext}>next</button>
-        <button onClick={timerRun}>start</button>
         <button onClick={timerReset}>reset</button>
+        <button onClick={timerRun}>go / stop</button>
+        <button onClick={timerNext}>next</button>
       </div>
     </div>
   );
