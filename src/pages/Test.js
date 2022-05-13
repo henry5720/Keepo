@@ -3,56 +3,30 @@ import React, { useState, useEffect, useReducer, useRef } from "react";
 const initialState = {
   minutes: 25,
   seconds: 0,
-  count: 0,
+  count: 1,
   isOn: false,
 };
 function reducer(state, action) {
   switch (action.type) {
     case "timerRun":
-      if (state.seconds === 0 && state.minutes === 0) {
         return {
           ...state,
-          count: state.count + 1,
-          minutes: 25,
-          seconds: 0,
-          isOn: !state.isOn,
+          minutes: (state.minutes!==0&&state.seconds===0)?state.minutes-1:state.minutes,
+          seconds: (state.minutes===0&&state.seconds<=0)?0:(state.seconds!==0)?state.seconds-1:59,
+          isOn: (state.minutes===0&&state.seconds===0)?!state.isOn:state.isOn
         };
-      }
-      if (state.seconds === 0 && state.minutes !== 0) {
-        return {
-          ...state,
-          seconds: 59,
-          minutes: state.minutes - 1,
-        };
-      }
-      if (state.seconds !== 0 && state.minutes !== 0) {
-        return {
-          ...state,
-          seconds: state.seconds - 1,
-          minutes: state.minutes,
-        };
-      }
-      if (state.seconds !== 0 && state.minutes === 0) {
-        return {
-          ...state,
-          seconds: state.seconds - 1,
-          minutes: state.minutes,
-        };
-      }
+        
     case "timerNext":
       console.log(state);
       return {
         ...initialState,
-        count: state.count + 1,
+        count: state.count<4?state.count+1:1,        
         isOn: false,
       };
+
     case "timerReset":
       return {
-        ...state,
-        minutes: 25,
-        seconds: 0,
-        count: 0,
-        isOn: false,
+        ...initialState
       };
 
     default:
@@ -62,21 +36,20 @@ function reducer(state, action) {
 
 function Timer() {
   const [state, dispatch] = useReducer(reducer, initialState);
+    const initRef=useRef(initialState)
 
   const timerMinutes = state.minutes < 10 ? `0${state.minutes}` : state.minutes;
   const timerSeconds = state.seconds < 10 ? `0${state.seconds}` : state.seconds;
 
   useEffect(() => {
-    console.log(state);
     const interval = setInterval(() => {
-      if (state.isOn) {
-        dispatch({ type: "timerRun" });
-      } else {
+        state.isOn?
+        dispatch({ type: "timerRun" }):
         clearInterval(interval);
-      }
     }, 1000);
     return () => clearInterval(interval);
   }, [state]);
+
 
   function timerRun() {
     state.isOn = !state.isOn;
@@ -86,6 +59,7 @@ function Timer() {
   }
 
   function timerNext() {
+    console.log("Next");
     dispatch({
       type: "timerNext",
     });

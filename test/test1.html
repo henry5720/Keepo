@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        /* body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        } */
+        .root{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0 auto;
+            width: 100%;
+            height: 100vh;
+            background-color: bisque;
+        }
+        .header{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: cadetblue;
+        }
+        .footer{
+            height: 50px;
+            background-color: coral;
+        }
+        .top{
+            height: 50px;
+            background-color: cornflowerblue;
+        }
+        .mid{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: crimson;
+        }
+        .one{
+            height: 250px;
+            background-color: darkcyan;
+        }
+        .two{
+            flex: 1;
+            background-color: deeppink;
+        }
+    </style>
+</head>
+<body>
+    <ul class="root">
+        <li class="header">
+            <span class="top"></span>
+            <span class="mid">
+                <span class="one">日曆
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </span>
+                <span class="two">行程</span>
+            </span>
+        </li>
+        <li class="footer"></li>
+    </ul>
+</body>
+</html>
