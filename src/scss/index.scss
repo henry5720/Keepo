@@ -8,7 +8,12 @@ li {
   list-style: none;
 }
 
-.app{
+a{
+  text-decoration: none;
+  color: #333;
+}
+
+.app {
   display: flex;
   .pomodoro {
     flex: 1;
@@ -29,7 +34,13 @@ li {
       width: 100px;
     }
   }
-  
+
+  input {
+    width: 200px;
+    height: 20px;
+    background-color: cadetblue;
+  }
+
   ul {
     display: flex;
     flex-direction: column;
@@ -38,14 +49,13 @@ li {
     border-right: 1px solid #333;
     width: 200px;
     // background-color: aqua;
-    li{
+    li {
       margin-bottom: 30px;
       height: 30px;
       font-size: 20px;
-      &:hover{
+      &:hover {
         border-bottom: 1px solid #333;
       }
     }
   }
-  
 }

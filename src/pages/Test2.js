@@ -1,17 +1,13 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useReducer,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import Nav from "./Nav/Nav";
-import { TimerContext } from "../App";
 
-// import { situation ,initialState, reducer } from "../data/reducer"
+import { situation, initialState, reducer } from "../data/reducer";
 
 function Timer() {
-  const [state, dispatch] = useContext(TimerContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const timerMinutes = state.minutes < 10 ? `0${state.minutes}` : state.minutes;
+  const timerSeconds = state.seconds < 10 ? `0${state.seconds}` : state.seconds;
 
   useEffect(() => {
     console.log(state);
@@ -19,9 +15,7 @@ function Timer() {
       state.isOn ? dispatch({ type: "timerRun" }) : clearInterval(interval);
     }, 1000);
     return () => clearInterval(interval);
-  }, [state]);
-
-  useEffect(() => {}, [state]);
+  }, [state.isOn]);
 
   function timerRun() {
     state.isOn = !state.isOn;
@@ -31,7 +25,7 @@ function Timer() {
   }
 
   function timerNext() {
-    // state.situation="shortBreak"
+    console.log("Next");
     dispatch({
       type: "timerNext",
     });
@@ -43,20 +37,12 @@ function Timer() {
     });
   }
 
-  function setTimeLeft(e) {
-    dispatch({
-      type: "setTimeLeft",
-      payload: e.target.value,
-    });
-  }
-
   return (
     <>
       <Nav />
       <div className="pomodoro">
         <div className="timer">
-          {/* {timerMinutes}:{timerSeconds} */}
-          {new Date(state.timeLeft * 60 * 1000).toISOString().substr(14, 5)}
+          {timerMinutes}:{timerSeconds}
         </div>
         <div>{state.count}/4</div>
         <div>
@@ -65,7 +51,6 @@ function Timer() {
           <button onClick={timerNext}>next</button>
         </div>
       </div>
-
     </>
   );
 }

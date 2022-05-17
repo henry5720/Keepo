@@ -1,115 +1,89 @@
-import React, { useState, useEffect, useReducer, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
-const initialState = {
-  minutes: 25,
-  seconds: 0,
-  count: 0,
-  isOn: false,
-};
-function reducer(state, action) {
-  switch (action.type) {
-    case "timerRun":
-      if (state.seconds === 0 && state.minutes === 0) {
-        return {
-          ...state,
-          count: state.count + 1,
-          minutes: 25,
-          seconds: 0,
-          isOn: !state.isOn,
-        };
-      }
-      if (state.seconds === 0 && state.minutes !== 0) {
-        return {
-          ...state,
-          seconds: 59,
-          minutes: state.minutes - 1,
-        };
-      }
-      if (state.seconds !== 0 && state.minutes !== 0) {
-        return {
-          ...state,
-          seconds: state.seconds - 1,
-          minutes: state.minutes,
-        };
-      }
-      if (state.seconds !== 0 && state.minutes === 0) {
-        return {
-          ...state,
-          seconds: state.seconds - 1,
-          minutes: state.minutes,
-        };
-      }
-    case "timerNext":
-      console.log(state);
-      return {
-        ...initialState,
-        count: state.count + 1,
-        isOn: false,
-      };
-    case "timerReset":
-      return {
-        ...state,
-        minutes: 25,
-        seconds: 0,
-        count: 0,
-        isOn: false,
-      };
+function useTimer(callback, delay, isOn) {
+  const [remainSecond, setRemainSecond] = useState(0);
+  const savedCallback = useRef();
+  const savedDelay = useRef();
 
-    default:
-      throw new Error();
-  }
+  // 保存到期回呼方法
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // 建立計數器並執行倒數
+  useEffect(() => {
+    // 刷新延遲秒數
+    savedDelay.current = delay;
+    setRemainSecond(delay);
+    console.log(delay);
+    // 每秒執行
+    const tick = (id) => {
+      // 計算剩餘時間
+      if (isOn) {
+        if (savedDelay.current > 0) {
+          savedDelay.current -= 1;
+        } else {
+          savedDelay.current = 0;
+        }
+      }
+
+      // 更新輸出的剩餘秒數
+      setRemainSecond(savedDelay.current);
+
+      // 停止條件
+      if (savedDelay.current <= 0) {
+        savedCallback.current();
+        clearInterval(id);
+      }
+    };
+    if (delay !== null) {
+      // 產生計數器
+      const id = setInterval(() => tick(id), 1000);
+
+      // 清除計數器 (cleanup)
+      return () => clearInterval(id);
+    }
+  }, [isOn]);
+
+  // 輸出剩餘秒數
+  return remainSecond;
 }
 
-function Timer() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const Timer = () => {
+  const [isOn, setIsOn] = useState(false);
+  const [delay, setDelay] = useState(10);
 
-  const timerMinutes = state.minutes < 10 ? `0${state.minutes}` : state.minutes;
-  const timerSeconds = state.seconds < 10 ? `0${state.seconds}` : state.seconds;
+  // useCallback 會回傳該 callback 的 memoized 版本，它僅在依賴改變時才會更新
+  const handleTimeup = useCallback(() => console.log("time up!!"), []);
+
+  function countdown() {
+    setIsOn(!isOn);
+  }
+  // 使用 useTimer 倒數
+  const remainSecond = useTimer(handleTimeup, delay, isOn);
 
   useEffect(() => {
-    console.log(state);
-    const interval = setInterval(() => {
-      if (state.isOn) {
-        dispatch({ type: "timerRun" });
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [state]);
-
-  function timerRun() {
-    state.isOn = !state.isOn;
-    dispatch({
-      type: "timerRun",
-    });
-  }
-
-  function timerNext() {
-    dispatch({
-      type: "timerNext",
-    });
-  }
-
-  function timerReset() {
-    dispatch({
-      type: "timerReset",
-    });
-  }
+    console.log(new Date().toISOString());
+    console.log(isOn);
+  }, [isOn]);
 
   return (
-    <div className="pomodoro">
-      <div className="timer">
-        {timerMinutes}:{timerSeconds}
+    <>
+      請輸入倒數秒數
+      <input
+        value={delay}
+        type="number"
+        onChange={(e) => setDelay(Number(e.target.value) || 0)}
+      />
+      {/* 顯示剩餘秒數 */}
+      <div className="tp-count-down-timer">
+        <div className="tp-count-down-timer__time">
+          {new Date(remainSecond * 1000).toISOString().substr(11, 8)}
+        </div>
+        <button onClick={countdown}>click</button>
       </div>
-      <div>{state.count}/4</div>
-      <div>
-        <button onClick={timerReset}>reset</button>
-        <button onClick={timerRun}>go / stop</button>
-        <button onClick={timerNext}>next</button>
-      </div>
-    </div>
+    </>
   );
-}
+};
 
 export default Timer;
