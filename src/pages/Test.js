@@ -65,7 +65,6 @@ function Timer() {
           <button onClick={timerNext}>next</button>
         </div>
       </div>
-
     </>
   );
 }

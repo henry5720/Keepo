@@ -5,7 +5,7 @@ function Nav() {
   return (
     <ul>
       <li>
-        <Link to="/Timer" className="btn">
+        <Link to="/" className="btn">
           Timer
         </Link>
       </li>

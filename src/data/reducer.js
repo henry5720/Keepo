@@ -1,3 +1,12 @@
+function init(initialState) {
+  return {
+    situation: situation.work.type,
+    timeLeft: situation.work.timeLeft,
+    count: 1,
+    isOn: false,
+  };
+}
+
 let situation = {
   work: {
     type: "work",
@@ -19,9 +28,13 @@ let situation = {
 //   longBreak: 15,
 // }
 
+function setTimeLeft(timeLeft) {
+  return timeLeft;
+}
+
 const initialState = {
   situation: situation.work.type,
-  timeLeft: situation.work.timeLeft,
+  timeLeft: 25,
   count: 1,
   isOn: false,
 };
@@ -48,6 +61,9 @@ function timerCount(state) {
 
 function reducer(state, action) {
   switch (action.type) {
+    case "setTimeLeft":
+      const timeLeft = action.payload;
+
     case "timerRun":
       if (state.timeLeft === 0) {
         return {
@@ -77,107 +93,8 @@ function reducer(state, action) {
         isOn: false,
       };
 
-    case "setTimeLeft":
-      return {
-        ...initialState,
-        timeLeft: action.payload,
-      };
-
     default:
       throw new Error();
   }
 }
-export { initialState, reducer };
-
-// const situation = {
-//     work: "work",
-//     shortBreak: "shortBreak",
-//     longBreak: "longBreak",
-//   };
-// const initialState = {
-//     situation: situation.work,
-//     minutes: 1,
-//     seconds: 0,
-//     timeLeft: new Date(25*60*1000).toISOString().substr(13, 6),
-//     count: 1,
-//     isOn: false,
-//   };
-
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case "timerRun":
-//       if (state.minutes === 0 && state.seconds === 0) {
-//         return {
-//           ...initialState,
-//           isOn:
-//             state.minutes === 0 && state.seconds === 0
-//               ? !state.isOn
-//               : state.isOn,
-//         };
-//       } else {
-//         return {
-//           ...state,
-//           minutes:
-//             state.minutes !== 0 && state.seconds === 0
-//               ? state.minutes - 1
-//               : state.minutes,
-//           seconds:
-//             state.minutes === 0 && state.seconds <= 0
-//               ? 0
-//               : state.seconds !== 0
-//               ? state.seconds - 1
-//               : 1,
-//         };
-//       }
-
-//     case "timerNext":
-//       console.log(state);
-//       if (state.situation === "work") {
-//         return {
-//           ...initialState,
-//           count:
-//             state.count < 4 && state.situation == "work" ? state.count + 1 : 1,
-//           isOn: false,
-//           minutes: 25,
-//           situation: (state.count + 1) % 4 === 0 ? "longBreak" : "shortBreak",
-//         };
-//       }
-//       if (state.situation === "shortBreak") {
-//         return {
-//           ...initialState,
-//           count:
-//             state.count < 4 && state.situation == "work"
-//               ? state.count + 1
-//               : state.count,
-//           isOn: false,
-//           minutes: 5,
-//         };
-//       }
-//       if (state.situation === "longBreak") {
-//         return {
-//           ...initialState,
-//           count:
-//             state.count < 4 && state.situation == "work"
-//               ? state.count + 1
-//               : state.count,
-//           isOn: false,
-//           minutes: 15,
-//         };
-//       }
-
-//     case "timerReset":
-//       return {
-//         ...initialState,
-//         isOn: false,
-//       };
-
-//       case "timerSet":
-//           return {
-//             ...initialState,
-//             minutes:state.minutes,
-//             isOn: false,
-//           };
-//     default:
-//       throw new Error();
-//   }
-// }
+export { initialState, reducer, init };
